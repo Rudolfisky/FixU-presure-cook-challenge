@@ -1,4 +1,4 @@
-# FixU-presure-cook-challenge
+# FixU-pressure-cook-challenge
 
 # Concept
 We want create a product that can help people use less energy when they shower. In order to help them we want to make a smart shower that will automatically lower the water temperature after showering for a set amount of time (like 5min) till the water being used is no longer heated.
@@ -8,14 +8,18 @@ This system will either motivate people to shower less, but also use less energy
 # Moscow demo requirements
 The requirements set for our final demo.
 ## Must
-- Measure water temperature.
-- timer to control water temperature.
+- Measure/mock water temperature.
+- Timer to control water temperature.
+- Water temperature visualization.
+- Working water system (flowing water).
 ## Should
-- water temperature visualization.
-- display water use on display.
+- Display water use on display.
+- Temperature knob.
+- water flow control
 ## Could
-- Working water system (flowing water)
-- Heating element to control water temperature
-- water budgeting system.
+- Heating element to control water temperature.
+- Water budgeting system.
+- Water flow sensor.
+- different showering modes.
 ## Wont
-- infrared camera
+- Infra-red camera
