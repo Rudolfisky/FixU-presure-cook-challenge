@@ -23,3 +23,5 @@ The requirements set for our final demo.
 - different showering modes.
 ## Wont
 - Infra-red camera
+
+Minimal Lovable Product
