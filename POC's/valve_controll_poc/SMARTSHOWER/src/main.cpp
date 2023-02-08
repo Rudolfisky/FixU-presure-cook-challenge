@@ -1,7 +1,7 @@
 #include "Thermometer/Thermometer.h"
 #include "Webserver/Webserver.h"
 
-#define PIN_THERMOMETER 4
+#define PIN_THERMOMETER 12
 
 
 //dingus
