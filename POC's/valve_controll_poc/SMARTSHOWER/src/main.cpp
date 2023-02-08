@@ -1,9 +1,31 @@
-#include <Arduino.h>
+#include "Thermometer/Thermometer.h"
+#include "Webserver/Webserver.h"
 
-void setup() {
-  // put your setup code here, to run once:
+#define PIN_THERMOMETER 4
+
+
+
+
+Thermometer *thermometer;
+Webserver *webserver;
+
+
+void setup()
+{
+  Serial.begin(115200);
+  thermometer = new Thermometer(PIN_THERMOMETER);
+  webserver = new Webserver();
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
+void loop()
+{
+  Serial.print("Temperature: ");
+  Serial.println(thermometer->getTemperature());
+
+  webserver->tick();
+
+  Serial.print("Alpha: ");
+  Serial.println(webserver->getAlpha());
+  Serial.print("Beta: ");
+  Serial.println(webserver->getBeta());
 }
