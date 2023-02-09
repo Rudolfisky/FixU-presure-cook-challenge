@@ -1,12 +1,12 @@
 #ifndef Mode_H
 #define mode_H
 
-typedef enum
+enum Modes
 {
     GREEN_MODE,
     RAPID_MODE,
     MANUAL_MODE
-}Modes;
+};
 
 class Mode
 {

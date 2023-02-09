@@ -10,7 +10,7 @@
 
 //dingus
 
-Thermoactuator *thermoactuator;
+//Thermoactuator *thermoactuator;
 //Thermometer *thermometer;
 Webserver *webserver;
 Shower *shower;
@@ -19,7 +19,7 @@ Shower *shower;
 void setup()
 {
   Serial.begin(115200);
-  thermoactuator = new Thermoactuator(PIN_THERMOACTUATOR);
+  //thermoactuator = new Thermoactuator(PIN_THERMOACTUATOR);
   //thermometer = new Thermometer(PIN_THERMOMETER);
   webserver = new Webserver();
   shower = new Shower();
@@ -34,8 +34,8 @@ void loop()
 
   webserver->tick();
 
-  Serial.print("Alpha: ");
-  Serial.println(webserver->getAlpha());
-  Serial.print("Beta: ");
-  Serial.println(webserver->getBeta());
+  //Serial.print("Alpha: ");
+  //Serial.println(webserver->getAlpha());
+  //Serial.print("Beta: ");
+  //Serial.println(webserver->getBeta());
 }

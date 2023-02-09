@@ -26,6 +26,13 @@ private:
     Runningstate RunningState;
     Mode ShowerMode;
     unsigned long currentmillis;
+    int ShowerTimeCold;
+    int ShowerTimeMedium;
+    int ShowerTimeHot;
+    int value;
+    int pin = 4; // pin led
+    unsigned long LedSlowDown;
+    unsigned long currentmillisLed;
     
 };
 
