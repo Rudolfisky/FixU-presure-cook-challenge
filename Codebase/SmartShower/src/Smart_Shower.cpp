@@ -1,18 +1,13 @@
 #include "Smart_Shower.h"
 #include <Arduino.h>
 
-int ShowerTimeCold;
-int ShowerTimeMedium;
-int ShowerTimeHot;
-int value;
-int pin = 4; // pin led
-unsigned long LedSlowDown;
-unsigned long currentmillisLed;
+
 
 Shower::Shower()
 {
     ShowerState = STANDBY;
     RunningState = NO_INDICATOR;
+    ShowerMode = GREEN_MODE;
     currentmillis = 0;
 }
 void Shower::HandleEvent(Events event)
