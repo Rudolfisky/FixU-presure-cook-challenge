@@ -1,16 +1,21 @@
 #include "Smart_Shower.h"
 #include <Arduino.h>
 
- int ShowerTimeCold;
- int ShowerTimeMedium;
- int ShowerTimeHot;
+int ShowerTimeCold;
+int ShowerTimeMedium;
+int ShowerTimeHot;
+int value;
+int pin = 4; // pin led
+unsigned long LedSlowDown;
+unsigned long currentmillisLed;
 
-shower::shower()
+Shower::Shower()
 {
     ShowerState = STANDBY;
     RunningState = NO_INDICATOR;
+    currentmillis = 0;
 }
-void shower::HandleEvent(Events event)
+void Shower::HandleEvent(Events event)
 {
     switch (ShowerState)
     {
@@ -27,14 +32,14 @@ void shower::HandleEvent(Events event)
     }
 }
 
-void shower::Run(Events event)
+void Shower::Run(Events event)
 {
-    switch(RunningState)
+    switch (RunningState)
     {
     case NO_INDICATOR:
         break;
     case HOT_TEMP:
-        RunHot(event);
+        RunHot();
         break;
     case MEDIUM_TEMP:
         RunMedium(event);
@@ -49,7 +54,7 @@ void shower::Run(Events event)
     }
 }
 
-void shower::selectedProgram(Events event)
+void Shower::selectedProgram(Events event)
 {
     switch (event)
     {
@@ -62,13 +67,13 @@ void shower::selectedProgram(Events event)
         Serial.println(ShowerMode.GetTimeMedium());
         Serial.println(ShowerMode.GetTimeHot());
         break;
-    
+
     default:
         break;
     }
 }
 
-Modes shower::ChangeMode(Mode mode)
+Modes Shower::ChangeMode(Mode mode)
 {
     Modes currentMode = mode.GetCurrentMode();
 
@@ -76,7 +81,7 @@ Modes shower::ChangeMode(Mode mode)
     {
     case GREEN_MODE:
         Serial.println("GREEN MODE");
-       currentMode = RAPID_MODE;
+        currentMode = RAPID_MODE;
         break;
     case RAPID_MODE:
         Serial.println("RAPID MODE");
@@ -89,47 +94,73 @@ Modes shower::ChangeMode(Mode mode)
     default:
         break;
     }
-     
+
     return currentMode;
 }
 
-void shower::RunHot(Events event)
+void Shower::RunHot()
 {
+    Serial.println("hot");
     currentmillis = millis();
 
-    while(ShowerTimeHot != 0)
+    while (ShowerTimeHot != 0)
     {
-        if(millis() - currentmillis >= ShowerTimeHot)
+        if (millis() - currentmillis >= ShowerTimeHot)
         {
             ShowerTimeHot = 0;
+        }
+         if (millis() - currentmillisLed >= LedSlowDown) // lower led
+        {
+            value -= 10;
+            analogWrite(pin, value);
+            Serial.print("data: ");
+            Serial.println(value);
+            currentmillisLed = millis();
         }
     }
     RunningState = MEDIUM_TEMP;
 }
 
-void shower::RunMedium(Events event)
+void Shower::RunMedium(Events event)
 {
     currentmillis = millis();
 
-    while(ShowerTimeMedium != 0)
+    while (ShowerTimeMedium != 0)
     {
-        if(millis() - currentmillis >= ShowerTimeMedium)
+        if (millis() - currentmillis >= ShowerTimeMedium) // switch to diffrent mode
         {
             ShowerTimeMedium = 0;
+        }
+
+        if (millis() - currentmillisLed >= LedSlowDown) // lower led
+        {
+            value -= 10;
+            analogWrite(pin, value);
+            Serial.print("data: ");
+            Serial.println(value);
+            currentmillisLed = millis();
         }
     }
     RunningState = COLD_TEMP;
 }
 
-void shower::RunCold(Events event)
+void Shower::RunCold(Events event)
 {
     currentmillis = millis();
 
-    while(ShowerTimeCold != 0)
+    while (ShowerTimeCold != 0)
     {
-        if(millis() - currentmillis >= ShowerTimeCold)
+        if (millis() - currentmillis >= ShowerTimeCold)
         {
             ShowerTimeCold = 0;
+        }
+         if (millis() - currentmillisLed >= LedSlowDown) // lower led
+        {
+            value -= 10;
+            analogWrite(pin, value);
+            Serial.print("data: ");
+            Serial.println(value);
+            currentmillisLed = millis();
         }
     }
     RunningState = DONE;

@@ -1,26 +1,36 @@
+#include "Thermoactuator/Thermoactuator.h"
 #include "Thermometer/Thermometer.h"
 #include "Webserver/Webserver.h"
+#include "Smart_Shower.h"
 
-#define PIN_THERMOMETER 12
+//#define PIN_THERMOMETER 12
+#define PIN_THERMOACTUATOR 4
+
 
 
 //dingus
 
-Thermometer *thermometer;
+Thermoactuator *thermoactuator;
+//Thermometer *thermometer;
 Webserver *webserver;
+Shower *shower;
 
 
 void setup()
 {
   Serial.begin(115200);
-  thermometer = new Thermometer(PIN_THERMOMETER);
+  thermoactuator = new Thermoactuator(PIN_THERMOACTUATOR);
+  //thermometer = new Thermometer(PIN_THERMOMETER);
   webserver = new Webserver();
+  shower = new Shower();
 }
 
 void loop()
 {
-  Serial.print("Temperature: ");
-  Serial.println(thermometer->getTemperature());
+  //Serial.print("Temperature: ");
+  //Serial.println(thermometer->getTemperature());
+  shower->RunHot();
+  //thermoactuator->tick();
 
   webserver->tick();
 

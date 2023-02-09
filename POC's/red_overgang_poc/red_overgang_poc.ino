@@ -9,20 +9,12 @@ void setup() {
 }
 
 void loop() {
-  if(led > 0){
-    led--;
-    delay(10);
-  }
-  else{
-    resetRed(); //remove this
-  }
-  analogWrite(ledPin, led);
-  Serial.print("data: ");
-  Serial.println(led);
+  
 }
 
 // used to reset back to 0
-void resetRed(){
+void resetRed()
+{
   delay(1000);
-  led = 150;
+  
 }

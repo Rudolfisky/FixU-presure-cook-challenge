@@ -6,18 +6,18 @@
 #include "Running.h"
 #include "Mode.h"
 
-unsigned long currentmillis = 0;
 
-class shower
+
+class Shower
 {
 public:
-    shower();
+    Shower();
     void HandleEvent(Events event);
     void Run(Events event);
     Modes ChangeMode(Mode mode);
     void selectedProgram(Events event);
 
-    void RunHot(Events event);
+    void RunHot();
     void RunMedium(Events event);
     void RunCold(Events event);
 
@@ -25,6 +25,7 @@ private:
     States ShowerState;
     Runningstate RunningState;
     Mode ShowerMode;
+    unsigned long currentmillis;
     
 };
 
