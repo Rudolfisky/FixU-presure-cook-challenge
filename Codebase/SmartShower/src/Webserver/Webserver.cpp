@@ -7,19 +7,15 @@ Webserver::Webserver()
     ssid = "Askimo";
     password = "CringeDingus2003!";
     server = new WiFiServer(80);
-    OUTPUT26State = "off";
-    OUTPUT27State = "off";
+    SHOWERState = "off";
     previousTime = 0;
     alpha = false;
-    beta = false;
 
 
     // Initialize the output variables as outputs
-    pinMode(OUTPUT26, OUTPUT);
-    pinMode(OUTPUT27, OUTPUT);
+    pinMode(SHOWER, OUTPUT);
     // Set outputs to LOW
-    digitalWrite(OUTPUT26, LOW);
-    digitalWrite(OUTPUT27, LOW);
+    digitalWrite(SHOWER, LOW);
 
     // Connect to Wi-Fi network with SSID and password
     Serial.print("Connecting to ");
@@ -69,33 +65,19 @@ void Webserver::tick()
             client.println();
             
             // turns the GPIOs on and off
-            if (header.indexOf("GET /26/on") >= 0)
+            if (header.indexOf("GET /on") >= 0)
             {
-              Serial.println("GPIO 26 on");
-              OUTPUT26State = "on";
-              digitalWrite(OUTPUT26, HIGH);
+              Serial.println("Shower on");
+              SHOWERState = "on";
+              digitalWrite(SHOWER, HIGH);
               alpha = HIGH;
             }
-            else if (header.indexOf("GET /26/off") >= 0) 
+            else if (header.indexOf("GET /off") >= 0) 
             {
-              Serial.println("GPIO 26 off");
-              OUTPUT26State = "off";
-              digitalWrite(OUTPUT26, LOW);
+              Serial.println("Shower off");
+              SHOWERState = "off";
+              digitalWrite(SHOWER, LOW);
               alpha = LOW;
-            }
-            else if (header.indexOf("GET /27/on") >= 0)
-            {
-              Serial.println("GPIO 27 on");
-              OUTPUT27State = "on";
-              digitalWrite(OUTPUT27, HIGH);
-              beta = HIGH;
-            }
-            else if (header.indexOf("GET /27/off") >= 0)
-            {
-              Serial.println("GPIO 27 off");
-              OUTPUT27State = "off";
-              digitalWrite(OUTPUT27, LOW);
-              beta = LOW;
             }
             
             // Display the HTML web page
@@ -111,26 +93,16 @@ void Webserver::tick()
             client.println(".button2 {background-color: #555555;}</style></head>");
             
             // Web Page Heading
-            client.println("<body><h1>ESP32 Web Serveadsa  sda sdadsds asr</h1>");
+            client.println("<body><h1>Power Shower</h1>");
             
             // Display current state, and ON/OFF buttons for GPIO 26  
-            client.println("<p>GPIO 26 - State " + OUTPUT26State + "</p>");
-            // If the OUTPUT26State is off, it displays the ON button       
-            if (OUTPUT26State=="off") {
-              client.println("<p><a href=\"/26/on\"><button class=\"button\">ON</button></a></p>");
+            client.println("<p>Shower state " + SHOWERState + "</p>");
+            // If the SHOWERState is off, it displays the ON button       
+            if (SHOWERState=="off") {
+              client.println("<p><a href=\"/on\"><button class=\"button\">ON</button></a></p>");
             } else {
-              client.println("<p><a href=\"/26/off\"><button class=\"button button2\">OFF</button></a></p>");
-            } 
-               
-            // Display current state, and ON/OFF buttons for GPIO 27  
-            client.println("<p>GPIO 27 - State " + OUTPUT27State + "</p>");
-            // If the OUTPUT27State is off, it displays the ON button       
-            if (OUTPUT27State=="off") {
-              client.println("<p><a href=\"/27/on\"><button class=\"button\">ON</button></a></p>");
-            } else {
-              client.println("<p><a href=\"/27/off\"><button class=\"button button2\">OFF</button></a></p>");
+              client.println("<p><a href=\"/off\"><button class=\"button button2\">OFF</button></a></p>");
             }
-            client.println("</body></html>");
             
             // The HTTP response ends with another blank line
             client.println();
@@ -157,9 +129,5 @@ void Webserver::tick()
 bool Webserver::getAlpha()
 {
     return alpha;
-}
-bool Webserver::getBeta()
-{
-    return beta;
 }
 
