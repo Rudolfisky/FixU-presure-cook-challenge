@@ -7,8 +7,7 @@
 #include <DallasTemperature.h>
 #include <WiFi.h>
 
-#define OUTPUT26 26
-#define OUTPUT27 27
+#define SHOWER 26
 #define TIMEOUTTIME 2000
 
 
@@ -21,8 +20,7 @@ class Webserver
     const char* password;
     WiFiServer *server;
     String header;
-    String OUTPUT26State;
-    String OUTPUT27State;
+    String SHOWERState;
     uint64_t previousTime;
     bool alpha;
     bool beta;
@@ -32,7 +30,6 @@ class Webserver
     Webserver();
     void tick();
     bool getAlpha();
-    bool getBeta();
 };
 
 #endif

@@ -7,8 +7,8 @@ void Mode::SetMode(Modes newMode)
     switch (newMode)
     {
     case GREEN_MODE:
-        TIME_COLD = 0; // is above 30 up to 40
-        TIME_MEDIUM = 0; // medium is from 20 up to 30
+        TIME_COLD = 5000; // is above 30 up to 40
+        TIME_MEDIUM = 5000; // medium is from 20 up to 30
         TIME_HOT = 5000; // cold is below 20 c
         break;
     case RAPID_MODE:

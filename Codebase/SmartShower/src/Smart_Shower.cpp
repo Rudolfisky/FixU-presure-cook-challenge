@@ -7,7 +7,7 @@ Shower::Shower()
 {
     ShowerState = STANDBY;
     RunningState = NO_INDICATOR;
-    ShowerMode = GREEN_MODE;
+    currentModeShower = GREEN_MODE;
     currentmillis = 0;
 }
 void Shower::HandleEvent(Events event)
@@ -37,10 +37,10 @@ void Shower::Run(Events event)
         RunHot();
         break;
     case MEDIUM_TEMP:
-        RunMedium(event);
+        RunMedium();
         break;
     case COLD_TEMP:
-        RunCold(event);
+        RunCold();
         break;
     case DONE:
         break;
@@ -54,13 +54,15 @@ void Shower::selectedProgram(Events event)
     switch (event)
     {
     case PRESSMENU:
-        ShowerMode.SetMode(ChangeMode(ShowerMode));
+        ShowerMode.SetMode(GREEN_MODE);
         ShowerTimeCold = ShowerMode.GetTimeCold();
         ShowerTimeMedium = ShowerMode.GetTimeMedium();
         ShowerTimeHot = ShowerMode.GetTimeHot();
         Serial.println(ShowerMode.GetTimeCold());
         Serial.println(ShowerMode.GetTimeMedium());
         Serial.println(ShowerMode.GetTimeHot());
+        LedSlowDown = 500;
+        value = 255;
         break;
 
     default:
@@ -95,68 +97,90 @@ Modes Shower::ChangeMode(Mode mode)
 
 void Shower::RunHot()
 {
-    Serial.println("hot");
+    
     currentmillis = millis();
-
+  
     while (ShowerTimeHot != 0)
     {
         if (millis() - currentmillis >= ShowerTimeHot)
         {
+            Serial.println("hot done");
             ShowerTimeHot = 0;
         }
+      
          if (millis() - currentmillisLed >= LedSlowDown) // lower led
         {
-            value -= 10;
+            value -= TEMPDECREASEVAL;
             analogWrite(pin, value);
             Serial.print("data: ");
             Serial.println(value);
+            Serial.print(F("Temperature = "));
+            Serial.println(getTemperature());
             currentmillisLed = millis();
         }
     }
-    RunningState = MEDIUM_TEMP;
+    //RunningState = MEDIUM_TEMP;
 }
 
-void Shower::RunMedium(Events event)
+void Shower::RunMedium()
 {
     currentmillis = millis();
-
     while (ShowerTimeMedium != 0)
     {
         if (millis() - currentmillis >= ShowerTimeMedium) // switch to diffrent mode
         {
+            Serial.println("medium done");
             ShowerTimeMedium = 0;
         }
 
         if (millis() - currentmillisLed >= LedSlowDown) // lower led
         {
-            value -= 10;
+            value -= TEMPDECREASEVAL;
             analogWrite(pin, value);
             Serial.print("data: ");
             Serial.println(value);
+            Serial.print(F("Temperature = "));
+            Serial.println(getTemperature());
             currentmillisLed = millis();
         }
     }
-    RunningState = COLD_TEMP;
+    //RunningState = COLD_TEMP;
 }
 
-void Shower::RunCold(Events event)
+void Shower::RunCold()
 {
     currentmillis = millis();
-
+    
     while (ShowerTimeCold != 0)
     {
         if (millis() - currentmillis >= ShowerTimeCold)
         {
+            Serial.println("cold done");
             ShowerTimeCold = 0;
         }
          if (millis() - currentmillisLed >= LedSlowDown) // lower led
         {
-            value -= 10;
+            value -= TEMPDECREASEVAL;
             analogWrite(pin, value);
             Serial.print("data: ");
             Serial.println(value);
+            Serial.print(F("Temperature = "));
+            Serial.println(getTemperature());
             currentmillisLed = millis();
         }
     }
-    RunningState = DONE;
+    //RunningState = DONE;
+}
+
+void Shower::reset()
+{
+    ShowerTimeHot = 0;
+}
+
+float Shower::getTemperature()
+{
+    float temperature = 40;
+    temperature -= (255-value)/15;
+    return temperature;
+    
 }
