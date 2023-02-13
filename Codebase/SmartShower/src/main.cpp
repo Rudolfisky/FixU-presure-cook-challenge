@@ -5,8 +5,15 @@
 
 //#define PIN_THERMOMETER 12
 #define PIN_THERMOACTUATOR 4
-
-
+int OneTimeRun = 0;
+enum statusprogram
+{
+    SETUP,
+    HOT,
+    MEDIUM,
+    COLD,
+    WAIT
+};
 
 //dingus
 
@@ -14,6 +21,7 @@
 //Thermometer *thermometer;
 Webserver *webserver;
 Shower *shower;
+statusprogram  Statusprogram;
 
 
 void setup()
@@ -29,7 +37,7 @@ void loop()
 {
   //Serial.print("Temperature: ");
   //Serial.println(thermometer->getTemperature());
-  shower->RunHot();
+  
   //thermoactuator->tick();
 
   webserver->tick();
@@ -38,4 +46,42 @@ void loop()
   //Serial.println(webserver->getAlpha());
   //Serial.print("Beta: ");
   //Serial.println(webserver->getBeta());
+  if(webserver->getAlpha())
+  {
+    shower->RunHot();
+  }
+  else
+  {
+    shower->reset();
+  }
+
+  switch (Statusprogram)
+  {
+  case SETUP:
+    if(!webserver->getAlpha())
+    {
+      OneTimeRun = 0;
+    }
+     if(webserver->getAlpha() && OneTimeRun == 0)
+     {
+      OneTimeRun = 1;
+      shower->selectedProgram(PRESSMENU);
+      Statusprogram = HOT;
+     }
+    break;
+  case HOT:
+      shower->RunHot();
+      Statusprogram = MEDIUM;
+  break;
+  case MEDIUM:
+      shower->RunMedium();
+      Statusprogram = COLD;
+  break;
+  case COLD:
+      shower->RunCold();
+      Statusprogram = SETUP;
+  break;
+  default:
+    break;
+  }
 }
